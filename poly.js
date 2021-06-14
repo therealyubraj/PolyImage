@@ -3,7 +3,7 @@ class Poly {
     static spikiness = 1;
     static irregularity = 1;
     static minSides = 3;
-    static maxSides = 8;
+    static maxSides = 12;
 
     constructor() {
         this.points = [];
@@ -111,6 +111,46 @@ class Poly {
             this.color.setRed(red(this.color) + giveRandom(-10, 10));
             this.color.setGreen(green(this.color) + giveRandom(-10, 10));
             this.color.setBlue(blue(this.color) + giveRandom(-10, 10));
+        }
+
+        if (random() < 0.0001) {
+            this.points = [];
+            this.numberOfPoints = giveRandom(Poly.minSides, Poly.maxSides);
+            this.size = giveRandom(5, 50);
+            this.x = giveRandom(0, width);
+            this.y = giveRandom(0, height);
+            this.polyAngle = 360 / this.numberOfPoints;
+            this.rotation = giveRandom(0, 360);
+            for (let i = 0; i < this.numberOfPoints; i++) {
+                let vecX = this.x,
+                    vecY = this.y;
+
+                let ang = this.polyAngle * i + this.rotation;
+                let len = this.size;
+
+                if (random() < Poly.irregularity) {
+                    ang += giveRandom(-20, 20);
+                }
+
+                if (random() < Poly.spikiness) {
+                    len += giveRandom(-20, 20);
+                }
+
+                let dx = len * Math.sin(getRadian(ang));
+                let dy = len * -Math.cos(getRadian(ang));
+
+                vecX += dx;
+                vecY += dy;
+
+                let v = createVector(vecX, vecY);
+                this.points.push(v);
+            }
+
+            let r = giveRandom(0, 255);
+            let g = giveRandom(0, 255);
+            let b = giveRandom(0, 255);
+            this.color = color(r, g, b, Poly.opacity);
+            console.log("HERE");
         }
     }
 

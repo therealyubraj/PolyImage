@@ -39,11 +39,6 @@ function setup() {
 function draw() {
   background(0);
   image(origImg, 0, 0);
-  if (generation < 500 && generation % 10 == 0) {
-    population.forEach((p) => {
-      p.addPolygons(10);
-    });
-  }
 
   //calc fitness
   let bestFitness = -Infinity;
