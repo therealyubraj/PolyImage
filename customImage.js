@@ -24,7 +24,7 @@ class customImage {
     }
 
     getPixel(x, y) {
-        let indOfPixel = x + y * width;
+        let indOfPixel = x + y * origImg.width;
         let colorToRet = color(255);
         let startingInd = 4 * indOfPixel;
         colorToRet.setRed(this.renderer.pixels[startingInd + 0]);
