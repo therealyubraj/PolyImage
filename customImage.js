@@ -50,7 +50,7 @@ class customImage {
                     console.log(origCol);
                     console.log(generatedCol);
                 }
-                this.fitness += toIncrease;
+                this.fitness -= toIncrease;
             }
         }
     }
