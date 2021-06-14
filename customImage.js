@@ -1,6 +1,6 @@
 class customImage {
     constructor(createNew = true) {
-        this.startingNumberOfPolygons = 50;
+        this.startingNumberOfPolygons = 100;
         this.polygons = [];
         this.renderer = createGraphics(origImg.width, origImg.height);
         if (createNew) {
