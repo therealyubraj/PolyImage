@@ -1,7 +1,7 @@
 let origImg;
 
 
-let formMR = 0.1,
+let formMR = 0.01,
   populationSize = 50;
 
 let population = [];

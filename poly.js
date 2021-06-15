@@ -114,6 +114,11 @@ class Poly {
                 let v = createVector(vecX, vecY);
                 this.points.push(v);
             }
+            let c = getImagePixel(this.x, this.y);
+            let r = red(c) + giveRandom(-10, 10);
+            let g = green(c) + giveRandom(-10, 10);
+            let b = blue(c) + giveRandom(-10, 10);
+            this.color = color(r, g, b, Poly.opacity);
         }
     }
 }
