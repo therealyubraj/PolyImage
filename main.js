@@ -1,21 +1,26 @@
 let origImg;
 
-let populationSize = 50;
+
+let formMR = 0.1,
+  populationSize = 50;
 
 let population = [];
-let bestGeneratedImage;
+let bestGenerated;
 
 let generation = 1;
 
-let formMR = 0.1,
-  colorMR = 0.1;
+let desiredWidth = 100,
+  desiredHeight = 100;
 
 function preload() {
   origImg = loadImage("images/image.jpg");
 }
 
 function setup() {
-  createCanvas(origImg.width * 2, origImg.height);
+  createCanvas(desiredWidth * 2, desiredHeight);
+
+  origImg.resize(desiredWidth, desiredHeight);
+
   origImg.loadPixels();
 
   for (let i = 0; i < populationSize; i++) {
@@ -40,47 +45,41 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
-  //calc fitness
-  let bestFitness = -Infinity;
-  let bestFitnessInd = -1;
-  population.forEach((p, i) => {
+  let sumOfFitness = 0;
+  population.forEach(p => {
     p.getFitness();
+    sumOfFitness += p.fitness;
+  });
+
+  let bestFitness = -Infinity;
+  population.forEach(p => {
+    p.fitness /= sumOfFitness;
     if (p.fitness > bestFitness) {
+      bestGenerated = p;
       bestFitness = p.fitness;
-      bestFitnessInd = i;
     }
   });
 
-  //choose by fitness
-  let newPopn = [];
-  for (let i = 0; i < population.length; i++) {
-    let toCopy = population[pickOne()].copy();
-    toCopy.mutate();
-    newPopn.push(toCopy);
+  let newPopulation = [];
+  for (let i = 0; i < populationSize; i++) {
+    let n = population[pickOne()].copy();
+    n.mutate();
+    newPopulation.push(n);
   }
 
-  //free the memory
-  if (generation > 1) {
-    bestGeneratedImage.renderer.remove();
-    bestGeneratedImage.renderer = null;
-    bestGeneratedImage = null;
-  }
+  bestGenerated.drawIntoCanvas(origImg.width, 0);
+
+  //free previous memory
+  bestGenerated = null;
   population.forEach((p, i) => {
-    if (i == bestFitnessInd) {
-      bestGeneratedImage = p.copy();
-    }
     p.renderer.remove();
     p.renderer = null;
     p.poly = null;
   })
 
-  //make new popn
-  population = newPopn;
-
+  population = newPopulation;
+  console.log(generation);
   generation++;
-
-  console.log(generation, population.length);
-  bestGeneratedImage.drawIntoCanvas(origImg.width, 0);
 }
 
 function giveRandom(min, max) {

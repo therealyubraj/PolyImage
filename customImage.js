@@ -1,6 +1,6 @@
 class customImage {
     constructor(createNew = true) {
-        this.startingNumberOfPolygons = 100;
+        this.startingNumberOfPolygons = 50;
         this.polygons = [];
         this.renderer = createGraphics(origImg.width, origImg.height);
         if (createNew) {
@@ -17,6 +17,7 @@ class customImage {
     }
 
     drawIntoRenderer() {
+        this.renderer.background(0);
         this.polygons.forEach(p => {
             p.drawPolyIntoRenderer(this.renderer);
         });
@@ -45,26 +46,10 @@ class customImage {
                 let deltaBlue = blue(origCol) - blue(generatedCol);
 
                 let toIncrease = deltaRed * deltaRed + deltaGreen * deltaGreen + deltaBlue * deltaBlue;
-                if (isNaN(toIncrease)) {
-                    console.log(i, j);
-                    console.log(origCol);
-                    console.log(generatedCol);
-                }
+
                 this.fitness -= toIncrease;
             }
         }
-    }
-
-    addPolygons(n) {
-        for (let i = 0; i < n; i++) {
-            this.polygons.push(new Poly());
-        }
-    }
-
-    mutate() {
-        this.polygons.forEach(p => {
-            p.mutate(formMR, colorMR);
-        });
     }
 
     copy() {
@@ -75,4 +60,11 @@ class customImage {
         c.drawIntoRenderer();
         return c;
     }
+
+    mutate() {
+        this.polygons.forEach(p => {
+            p.mutate(formMR);
+        });
+    }
+
 }
