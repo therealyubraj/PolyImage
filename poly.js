@@ -115,9 +115,9 @@ class Poly {
                 this.points.push(v);
             }
             let c = getImagePixel(this.x, this.y);
-            let r = red(c) + giveRandom(-10, 10);
-            let g = green(c) + giveRandom(-10, 10);
-            let b = blue(c) + giveRandom(-10, 10);
+            let r = constrain(red(c) + giveRandom(-10, 10), 0, 255);
+            let g = constrain(green(c) + giveRandom(-10, 10), 0, 255);
+            let b = constrain(blue(c) + giveRandom(-10, 10), 0, 255);
             this.color = color(r, g, b, Poly.opacity);
         }
     }
