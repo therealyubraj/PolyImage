@@ -12,6 +12,10 @@ let generation = 1;
 let desiredWidth = 100,
   desiredHeight = 100;
 
+let maxPolygons = 50,
+  polygonsToIncrement = 5,
+  polygonIncrementDuration = 200;
+
 function preload() {
   origImg = loadImage("images/image.jpg");
 }
@@ -45,9 +49,10 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
-  if (generation < 4000  && generation % 200 == 0) {
+  let currentPolygons = population[0].polygons.length;
+  if (currentPolygons < maxPolygons && generation % polygonIncrementDuration == 0) {
     population.forEach((p) => {
-      p.addPoly(5);
+      p.addPoly(polygonsToIncrement);
     })
   }
 
@@ -65,6 +70,8 @@ function draw() {
       bestFitness = p.fitness;
     }
   });
+
+
 
   let newPopulation = [];
   for (let i = 0; i < populationSize; i++) {
@@ -84,6 +91,14 @@ function draw() {
   })
 
   population = newPopulation;
+  population.sort((a, b) => a.fitness - b.fitness);
+
+  if (population[0].fitness - population[populationSize - 1].fitness > 0.1) {
+    for (let i = 0; i < 10; i++) {
+      population[i] = new customImage();
+    }
+  }
+
   console.log(generation);
   generation++;
 }

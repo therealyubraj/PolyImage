@@ -64,6 +64,7 @@ class customImage {
             c.polygons.push(this.polygons[i].copy());
         }
         c.drawIntoRenderer();
+        c.fitness = this.fitness;
         return c;
     }
 
