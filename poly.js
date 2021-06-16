@@ -2,13 +2,15 @@ class Poly {
     static opacity = 220;
     static spikiness = 0.5;
     static irregularity = 0.5;
-    static minSides = 3;
+    static minSides = 6;
     static maxSides = 8;
+    static maxSize = 30;
+    static minSize = 5;
 
     constructor() {
         this.points = [];
         this.numberOfPoints = giveRandom(Poly.minSides, Poly.maxSides);
-        this.size = giveRandom(5, 30);
+        this.size = giveRandom(Poly.minSize, Poly.maxSize);
         this.x = giveRandom(0, origImg.width);
         this.y = giveRandom(0, height);
         this.polyAngle = 360 / this.numberOfPoints;
@@ -21,11 +23,11 @@ class Poly {
             let len = this.size;
 
             if (random() < Poly.irregularity) {
-                ang += giveRandom(-20, 20);
+                ang += giveRandom(-this.polyAngle / 2, this.polyAngle / 2);
             }
 
             if (random() < Poly.spikiness) {
-                len += giveRandom(-20, 20);
+                len += giveRandom(-this.size, this.size);
             }
 
             let dx = len * Math.sin(getRadian(ang));
@@ -80,39 +82,33 @@ class Poly {
 
     mutate(mrForm) {
         if (random() < mrForm) {
-            this.size += giveRandom(-5, 5);
             this.x += giveRandom(-10, 10);
             this.y += giveRandom(-10, 10);
-            this.rotation += giveRandom(-10, 10);
-            this.rotation = Math.max(0, this.rotation);
-
-            this.numberOfPoints += giveRandom(-2, 2);
-            this.numberOfPoints = constrain(this.numberOfPoints, Poly.minSides, Poly.maxSides);
-            this.polyAngle = 360 / this.numberOfPoints;
-            this.points = [];
             for (let i = 0; i < this.numberOfPoints; i++) {
-                let vecX = this.x,
-                    vecY = this.y;
+                // let vecX = this.x,
+                //     vecY = this.y;
 
-                let ang = this.polyAngle * i + this.rotation;
-                let len = this.size;
+                // let ang = this.polyAngle * i + this.rotation;
+                // let len = this.size;
 
-                if (random() < Poly.irregularity) {
-                    ang += giveRandom(-20, 20);
-                }
+                // if (random() < Poly.irregularity) {
+                //     ang += giveRandom(-20, 20);
+                // }
 
-                if (random() < Poly.spikiness) {
-                    len += giveRandom(-20, 20);
-                }
+                // if (random() < Poly.spikiness) {
+                //     len += giveRandom(-20, 20);
+                // }
 
-                let dx = len * Math.sin(getRadian(ang));
-                let dy = len * -Math.cos(getRadian(ang));
+                // let dx = len * Math.sin(getRadian(ang));
+                // let dy = len * -Math.cos(getRadian(ang));
 
-                vecX += dx;
-                vecY += dy;
+                // vecX += dx;
+                // vecY += dy;
 
-                let v = createVector(vecX, vecY);
-                this.points.push(v);
+                // let v = createVector(vecX, vecY);
+                // this.points.push(v);
+                this.points[i].x += giveRandom(-this.size / 4, this.size / 4);
+                this.points[i].y += giveRandom(-this.size / 4, this.size / 4);
             }
             let c = getImagePixel(this.x, this.y);
             let r = constrain(red(c) + giveRandom(-10, 10), 0, 255);

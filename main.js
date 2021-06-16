@@ -45,6 +45,12 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
+  if (generation < 4000  && generation % 200 == 0) {
+    population.forEach((p) => {
+      p.addPoly(5);
+    })
+  }
+
   let sumOfFitness = 0;
   population.forEach(p => {
     p.getFitness();

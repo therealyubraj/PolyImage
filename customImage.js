@@ -1,10 +1,10 @@
 class customImage {
+    static startingNumberOfPolygons = 5;
     constructor(createNew = true) {
-        this.startingNumberOfPolygons = 50;
         this.polygons = [];
         this.renderer = createGraphics(origImg.width, origImg.height);
         if (createNew) {
-            for (let i = 0; i < this.startingNumberOfPolygons; i++) {
+            for (let i = 0; i < customImage.startingNumberOfPolygons; i++) {
                 this.polygons.push(new Poly());
             }
             this.drawIntoRenderer();
@@ -49,6 +49,12 @@ class customImage {
 
                 this.fitness -= toIncrease;
             }
+        }
+    }
+
+    addPoly(n) {
+        for (let i = 0; i < n; i++) {
+            this.polygons.push(new Poly());
         }
     }
 
