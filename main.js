@@ -1,7 +1,7 @@
 let origImg;
 
 
-let formMR = 0.01,
+let formMR = 1,
   populationSize = 50;
 
 let population = [];
@@ -13,8 +13,8 @@ let desiredWidth = 100,
   desiredHeight = 100;
 
 let maxPolygons = 50,
-  polygonsToIncrement = 5,
-  polygonIncrementDuration = 200;
+  polygonsToIncrement = 1,
+  polygonIncrementDuration = 50;
 
 function preload() {
   origImg = loadImage("images/image.jpg");
@@ -56,48 +56,51 @@ function draw() {
     })
   }
 
-  let sumOfFitness = 0;
+  let bestFitness = -Infinity;
+  let avg = 0;
   population.forEach(p => {
     p.getFitness();
-    sumOfFitness += p.fitness;
-  });
-
-  let bestFitness = -Infinity;
-  population.forEach(p => {
-    p.fitness /= sumOfFitness;
+    avg += p.fitness;
     if (p.fitness > bestFitness) {
       bestGenerated = p;
       bestFitness = p.fitness;
     }
   });
+  avg /= populationSize;
+  avg *= 1.131;
 
-
-
-  let newPopulation = [];
   for (let i = 0; i < populationSize; i++) {
-    let n = population[pickOne()].copy();
+    let indToCopy = i;
+    let p = population[indToCopy];
+    let n = p.copy();
     n.mutate();
-    newPopulation.push(n);
+    n.getFitness();
+    if (n.fitness > p.fitness) {
+      console.error("Child won!");
+      p.renderer.remove();
+      p.renderer = null;
+      p.poly = null;
+      population[indToCopy] = n;
+    } else if (p.fitness < avg) {
+      console.error("HERE!!");
+      p.renderer.remove();
+      p.renderer = null;
+      p.poly = null;
+      n.renderer.remove();
+      n.renderer = null;
+      n.poly = null;
+      population[indToCopy] = new customImage();
+    } else {
+      n.renderer.remove();
+      n.renderer = null;
+      n.poly = null;
+    }
   }
 
   bestGenerated.drawIntoCanvas(origImg.width, 0);
 
   //free previous memory
   bestGenerated = null;
-  population.forEach((p, i) => {
-    p.renderer.remove();
-    p.renderer = null;
-    p.poly = null;
-  })
-
-  population = newPopulation;
-  population.sort((a, b) => a.fitness - b.fitness);
-
-  if (population[0].fitness - population[populationSize - 1].fitness > 0.1) {
-    for (let i = 0; i < 10; i++) {
-      population[i] = new customImage();
-    }
-  }
 
   console.log(generation);
   generation++;

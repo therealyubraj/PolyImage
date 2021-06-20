@@ -1,5 +1,5 @@
 class customImage {
-    static startingNumberOfPolygons = 5;
+    static startingNumberOfPolygons = 1;
     constructor(createNew = true) {
         this.polygons = [];
         this.renderer = createGraphics(origImg.width, origImg.height);

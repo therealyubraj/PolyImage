@@ -81,34 +81,23 @@ class Poly {
     }
 
     mutate(mrForm) {
+        // this.printPoly();
         if (random() < mrForm) {
             this.x += giveRandom(-10, 10);
             this.y += giveRandom(-10, 10);
+            this.size += giveRandom(-5, 5);
             for (let i = 0; i < this.numberOfPoints; i++) {
-                // let vecX = this.x,
-                //     vecY = this.y;
+                let vecX = this.points[i].x,
+                    vecY = this.points[i].y;
 
-                // let ang = this.polyAngle * i + this.rotation;
-                // let len = this.size;
+                //console.error("Changed from", vecX, vecY);
 
-                // if (random() < Poly.irregularity) {
-                //     ang += giveRandom(-20, 20);
-                // }
+                vecX += giveRandom(-this.size / 4, this.size / 4);
+                vecY += giveRandom(-this.size / 4, this.size / 4);
 
-                // if (random() < Poly.spikiness) {
-                //     len += giveRandom(-20, 20);
-                // }
+                //console.error("Changed to", vecX, vecY);
 
-                // let dx = len * Math.sin(getRadian(ang));
-                // let dy = len * -Math.cos(getRadian(ang));
-
-                // vecX += dx;
-                // vecY += dy;
-
-                // let v = createVector(vecX, vecY);
-                // this.points.push(v);
-                this.points[i].x += giveRandom(-this.size / 4, this.size / 4);
-                this.points[i].y += giveRandom(-this.size / 4, this.size / 4);
+                this.points[i] = createVector(vecX, vecY);
             }
             let c = getImagePixel(this.x, this.y);
             let r = constrain(red(c) + giveRandom(-10, 10), 0, 255);
@@ -116,5 +105,11 @@ class Poly {
             let b = constrain(blue(c) + giveRandom(-10, 10), 0, 255);
             this.color = color(r, g, b, Poly.opacity);
         }
+        // this.printPoly();
+        // console.log("-------------------");
+    }
+
+    printPoly() {
+        console.log("x:", this.x, 'y:', this.y, 'sides:', this.numberOfPoints, 'size:', this.size);
     }
 }
