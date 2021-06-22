@@ -1,6 +1,6 @@
 let origImg;
 
-let formMR = 1,
+let formMR = 0.1,
   populationSize = 50;
 
 let population = [];
@@ -12,8 +12,8 @@ let desiredWidth = 100,
   desiredHeight = 100;
 
 let maxPolygons = 50,
-  polygonsToIncrement = 1,
-  polygonIncrementDuration = 50;
+  polygonsToIncrement = 5,
+  polygonIncrementDuration = 100;
 
 
 function preload() {
@@ -28,7 +28,6 @@ function setup() {
   origImg.loadPixels();
 
   alternateCanvas = createGraphics(origImg.width, origImg.height);
-
   alternateCanvas.loadPixels();
 
   console.log(alternateCanvas.pixels.length, origImg.pixels.length);
@@ -55,36 +54,49 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
+  if (generation % polygonIncrementDuration == 0 && population[0].polygons.length < maxPolygons) {
+    population.forEach(p => {
+      p.addPoly(polygonsToIncrement);
+    });
+  }
+
   population.forEach(p => {
     p.calcFitness();
   });
 
-  let bestFitness = -Infinity;
+  let s = 0;
+
   population.forEach(p => {
-    if (p.fitness > bestFitness) {
-      bestFitness = p.fitness;
-      bestGenerated = p;
-    }
+    s += p.fitness;
   });
 
+  population.forEach(p => {
+    p.fitness /= s;
+  });
+
+  population.sort((a, b) => b.fitness - a.fitness);
+
+  bestGenerated = population[0];
+
+  let newPopulation = [];
   for (let i = 0; i < populationSize; i++) {
-    let indToPick = i;
+    let indToPick = pickOne();
     let p = population[indToPick];
-    for (let j = 0; j < 10; j++) {
-      let n = population[indToPick].copy();
-      n.mutate();
-      n.calcFitness();
-      if (n.fitness > p.fitness) {
-        population[indToPick] = n;
-        break;
-      }
+    let n = population[indToPick].copy();
+    n.mutate();
+    n.calcFitness();
+    if (n.fitness > p.fitness) {
+      newPopulation.push(n);
+    } else {
+      newPopulation.push(p);
     }
   }
+  population = newPopulation;
 
   drawIntoCanvas(bestGenerated);
-  //noLoop();
-  console.log(generation, bestFitness);
+  console.log(generation);
   generation++;
+  //noLoop();
 }
 
 function giveRandom(min, max) {
@@ -108,11 +120,9 @@ function getImagePixel(x, y) {
 function pickOne() {
   let index = 0;
   let r = random(1);
-  while (r > 0) {
-    r -= population[index].fitness;
-    if (index >= populationSize - 1) {
-      break;
-    }
+  let s = 0;
+  while (r > s) {
+    s += population[index].fitness;
     index++;
   }
   index--;

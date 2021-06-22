@@ -1,5 +1,5 @@
 class customImage {
-    static startingNumberOfPolygons = 50;
+    static startingNumberOfPolygons = 5;
     constructor(createNew = true) {
         this.polygons = [];
         if (createNew) {
