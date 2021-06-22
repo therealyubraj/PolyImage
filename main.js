@@ -21,6 +21,7 @@ function preload() {
 }
 
 function setup() {
+  pixelDensity(1);
   createCanvas(desiredWidth * 2, desiredHeight);
 
   origImg.resize(desiredWidth, desiredHeight);
@@ -53,32 +54,33 @@ function setup() {
 function draw() {
   background(0);
   image(origImg, 0, 0);
-  // population.forEach(p => {
-  //   p.calcFitness();
-  // });
 
-  // let bestFitness = -Infinity;
-  // population.forEach(p => {
-  //   if (p.fitness > bestFitness) {
-  //     bestFitness = p.fitness;
-  //     bestGenerated = p;
-  //   }
-  // });
+  population.forEach(p => {
+    p.calcFitness();
+  });
 
-  // for (let i = 0; i < populationSize; i++) {
-  //   let indToPick = pickOne();
-  //   let p = population[indToPick];
-  //   let n = population[indToPick].copy();
-  //   n.mutate();
-  //   n.calcFitness();
-  //   if (n.fitness > p.fitness) {
-  //     population[indToPick] = n;
-  //   }
-  // }
+  let bestFitness = -Infinity;
+  population.forEach(p => {
+    if (p.fitness > bestFitness) {
+      bestFitness = p.fitness;
+      bestGenerated = p;
+    }
+  });
 
-  noLoop();
+  for (let i = 0; i < populationSize; i++) {
+    let indToPick = i;
+    let p = population[indToPick];
+    let n = population[indToPick].copy();
+    n.mutate();
+    n.calcFitness();
+    if (n.fitness > p.fitness) {
+      population[indToPick] = n;
+    }
+  }
 
-
+  drawIntoCanvas(bestGenerated);
+  //noLoop();
+  console.log(generation, bestFitness);
   generation++;
 }
 

@@ -81,7 +81,6 @@ class Poly {
     }
 
     mutate(mrForm) {
-        // this.printPoly();
         if (random() < mrForm) {
             this.x += giveRandom(-10, 10);
             this.y += giveRandom(-10, 10);
@@ -90,12 +89,10 @@ class Poly {
                 let vecX = this.points[i].x,
                     vecY = this.points[i].y;
 
-                //console.error("Changed from", vecX, vecY);
 
                 vecX += giveRandom(-this.size / 4, this.size / 4);
                 vecY += giveRandom(-this.size / 4, this.size / 4);
 
-                //console.error("Changed to", vecX, vecY);
 
                 this.points[i] = createVector(vecX, vecY);
             }
@@ -105,8 +102,6 @@ class Poly {
             let b = constrain(blue(c) + giveRandom(-10, 10), 0, 255);
             this.color = color(r, g, b, Poly.opacity);
         }
-        // this.printPoly();
-        // console.log("-------------------");
     }
 
     printPoly() {

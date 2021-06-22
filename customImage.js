@@ -1,5 +1,5 @@
 class customImage {
-    static startingNumberOfPolygons = 5;
+    static startingNumberOfPolygons = 50;
     constructor(createNew = true) {
         this.polygons = [];
         if (createNew) {
@@ -40,8 +40,7 @@ class customImage {
                 let deltaGreen = Math.abs(green(origCol) - green(generatedCol));
                 let deltaBlue = Math.abs(blue(origCol) - blue(generatedCol));
 
-                s += deltaBlue + deltaGreen + deltaRed;
-                s /= 3;
+                s += (deltaBlue + deltaGreen + deltaRed) / 3;
             }
         }
         this.fitness = 1 / (1 + s);
