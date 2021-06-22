@@ -1,5 +1,5 @@
 class customImage {
-    static startingNumberOfPolygons = 5;
+    static startingNumberOfPolygons = 50;
     constructor(createNew = true) {
         this.polygons = [];
         if (createNew) {
@@ -7,6 +7,7 @@ class customImage {
                 this.polygons.push(new Poly());
             }
         }
+        this.normalizedFitness = 0;
         this.fitness = 0;
     }
 
@@ -31,8 +32,8 @@ class customImage {
     calcFitness() {
         let s = 0;
         this.drawIntoRenderer();
-        for (let i = 0; i < alternateCanvas.width; i++) {
-            for (let j = 0; j < alternateCanvas.height; j++) {
+        for (let i = 0; i < alternateCanvas.width; i += 2) {
+            for (let j = 0; j < alternateCanvas.height; j += 2) {
                 let origCol = getImagePixel(i, j);
                 let generatedCol = this.getPixel(i, j);
 
@@ -40,7 +41,10 @@ class customImage {
                 let deltaGreen = Math.abs(green(origCol) - green(generatedCol));
                 let deltaBlue = Math.abs(blue(origCol) - blue(generatedCol));
 
-                s += (deltaBlue + deltaGreen + deltaRed) / 3;
+                let toInc = (deltaBlue + deltaGreen + deltaRed) / 3;
+                if (toInc > 3) {
+                    s += toInc;
+                } 
             }
         }
         this.fitness = 1 / (1 + s);
@@ -59,6 +63,7 @@ class customImage {
             c.polygons.push(this.polygons[i].copy());
         }
         c.fitness = this.fitness;
+        c.normalizedFitness = this.normalizedFitness;
         return c;
     }
 

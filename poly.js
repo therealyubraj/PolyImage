@@ -84,19 +84,13 @@ class Poly {
         if (random() < mrForm) {
             this.x += giveRandom(-10, 10);
             this.y += giveRandom(-10, 10);
-            this.size += giveRandom(-5, 5);
             for (let i = 0; i < this.numberOfPoints; i++) {
                 let vecX = this.points[i].x,
                     vecY = this.points[i].y;
-                vecX += giveRandom(-this.size / 4, this.size / 4);
-                vecY += giveRandom(-this.size / 4, this.size / 4);
+                vecX += giveRandom(-this.size / 2, this.size / 2);
+                vecY += giveRandom(-this.size / 2, this.size / 2);
                 this.points[i] = createVector(vecX, vecY);
             }
-            let c = getImagePixel(this.x, this.y);
-            let r = constrain(red(c) + giveRandom(-10, 10), 0, 255);
-            let g = constrain(green(c) + giveRandom(-10, 10), 0, 255);
-            let b = constrain(blue(c) + giveRandom(-10, 10), 0, 255);
-            this.color = color(r, g, b, Poly.opacity);
         }
     }
 

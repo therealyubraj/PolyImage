@@ -1,7 +1,7 @@
 let origImg;
 
-let formMR = 0.1,
-  populationSize = 50;
+let formMR = 1,
+  populationSize = 100;
 
 let population = [];
 let bestGenerated, alternateCanvas;
@@ -14,7 +14,6 @@ let desiredWidth = 100,
 let maxPolygons = 50,
   polygonsToIncrement = 5,
   polygonIncrementDuration = 100;
-
 
 function preload() {
   origImg = loadImage("images/image.jpg");
@@ -54,11 +53,11 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
-  if (generation % polygonIncrementDuration == 0 && population[0].polygons.length < maxPolygons) {
-    population.forEach(p => {
-      p.addPoly(polygonsToIncrement);
-    });
-  }
+  // if (generation % polygonIncrementDuration == 0 && population[0].polygons.length < maxPolygons) {
+  //   population.forEach(p => {
+  //     p.addPoly(polygonsToIncrement);
+  //   });
+  // }
 
   population.forEach(p => {
     p.calcFitness();
@@ -71,10 +70,10 @@ function draw() {
   });
 
   population.forEach(p => {
-    p.fitness /= s;
+    p.normalizedFitness = p.fitness / s;
   });
 
-  population.sort((a, b) => b.fitness - a.fitness);
+  population.sort((a, b) => b.normalizedFitness - a.normalizedFitness);
 
   bestGenerated = population[0];
 
@@ -96,7 +95,7 @@ function draw() {
   drawIntoCanvas(bestGenerated);
   console.log(generation);
   generation++;
-  //noLoop();
+  // noLoop();
 }
 
 function giveRandom(min, max) {
@@ -122,7 +121,7 @@ function pickOne() {
   let r = random(1);
   let s = 0;
   while (r > s) {
-    s += population[index].fitness;
+    s += population[index].normalizedFitness;
     index++;
   }
   index--;
