@@ -36,8 +36,6 @@ class customImage {
                 let origCol = getImagePixel(i, j);
                 let generatedCol = this.getPixel(i, j);
 
-                let deltaRed = red(origCol) - red(generatedCol);
-                let deltaGreen = green(origCol) - green(generatedCol);
                 let deltaRed = Math.abs(red(origCol) - red(generatedCol));
                 let deltaGreen = Math.abs(green(origCol) - green(generatedCol));
                 let deltaBlue = Math.abs(blue(origCol) - blue(generatedCol));
