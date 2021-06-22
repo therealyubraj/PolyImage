@@ -50,14 +50,14 @@ class Poly {
         this.color = color(r, g, b, Poly.opacity);
     }
 
-    drawPolyIntoRenderer(renderer) {
-        renderer.noStroke();
-        renderer.fill(this.color);
-        renderer.beginShape();
+    drawPolyIntoRenderer() {
+        alternateCanvas.noStroke();
+        alternateCanvas.fill(this.color);
+        alternateCanvas.beginShape();
         this.points.forEach(p => {
-            renderer.vertex(p.x, p.y);
+            alternateCanvas.vertex(p.x, p.y);
         });
-        renderer.endShape(CLOSE);
+        alternateCanvas.endShape(CLOSE);
     }
 
     copy() {

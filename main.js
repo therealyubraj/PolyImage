@@ -1,11 +1,10 @@
 let origImg;
 
-
 let formMR = 1,
   populationSize = 50;
 
 let population = [];
-let bestGenerated;
+let bestGenerated, alternateCanvas;
 
 let generation = 1;
 
@@ -16,6 +15,7 @@ let maxPolygons = 50,
   polygonsToIncrement = 1,
   polygonIncrementDuration = 50;
 
+
 function preload() {
   origImg = loadImage("images/image.jpg");
 }
@@ -24,8 +24,13 @@ function setup() {
   createCanvas(desiredWidth * 2, desiredHeight);
 
   origImg.resize(desiredWidth, desiredHeight);
-
   origImg.loadPixels();
+
+  alternateCanvas = createGraphics(origImg.width, origImg.height);
+
+  alternateCanvas.loadPixels();
+
+  console.log(alternateCanvas.pixels.length, origImg.pixels.length);
 
   for (let i = 0; i < populationSize; i++) {
     population.push(new customImage());
@@ -48,61 +53,32 @@ function setup() {
 function draw() {
   background(0);
   image(origImg, 0, 0);
+  // population.forEach(p => {
+  //   p.calcFitness();
+  // });
 
-  let currentPolygons = population[0].polygons.length;
-  if (currentPolygons < maxPolygons && generation % polygonIncrementDuration == 0) {
-    population.forEach((p) => {
-      p.addPoly(polygonsToIncrement);
-    })
-  }
+  // let bestFitness = -Infinity;
+  // population.forEach(p => {
+  //   if (p.fitness > bestFitness) {
+  //     bestFitness = p.fitness;
+  //     bestGenerated = p;
+  //   }
+  // });
 
-  let bestFitness = -Infinity;
-  let avg = 0;
-  population.forEach(p => {
-    p.getFitness();
-    avg += p.fitness;
-    if (p.fitness > bestFitness) {
-      bestGenerated = p;
-      bestFitness = p.fitness;
-    }
-  });
-  avg /= populationSize;
-  avg *= 1.131;
+  // for (let i = 0; i < populationSize; i++) {
+  //   let indToPick = pickOne();
+  //   let p = population[indToPick];
+  //   let n = population[indToPick].copy();
+  //   n.mutate();
+  //   n.calcFitness();
+  //   if (n.fitness > p.fitness) {
+  //     population[indToPick] = n;
+  //   }
+  // }
 
-  for (let i = 0; i < populationSize; i++) {
-    let indToCopy = i;
-    let p = population[indToCopy];
-    let n = p.copy();
-    n.mutate();
-    n.getFitness();
-    if (n.fitness > p.fitness) {
-      console.error("Child won!");
-      p.renderer.remove();
-      p.renderer = null;
-      p.poly = null;
-      population[indToCopy] = n;
-    } else if (p.fitness < avg) {
-      console.error("HERE!!");
-      p.renderer.remove();
-      p.renderer = null;
-      p.poly = null;
-      n.renderer.remove();
-      n.renderer = null;
-      n.poly = null;
-      population[indToCopy] = new customImage();
-    } else {
-      n.renderer.remove();
-      n.renderer = null;
-      n.poly = null;
-    }
-  }
+  noLoop();
 
-  bestGenerated.drawIntoCanvas(origImg.width, 0);
 
-  //free previous memory
-  bestGenerated = null;
-
-  console.log(generation);
   generation++;
 }
 
@@ -136,4 +112,9 @@ function pickOne() {
   }
   index--;
   return index;
+}
+
+function drawIntoCanvas(c) {
+  c.drawIntoRenderer();
+  image(alternateCanvas, origImg.width, 0);
 }
