@@ -1,7 +1,7 @@
 let origImg;
 
 let formMR = 1,
-  populationSize = 100;
+  populationSize = 75;
 
 let population = [];
 let bestGenerated, alternateCanvas;
@@ -14,6 +14,8 @@ let desiredWidth = 100,
 let maxPolygons = 50,
   polygonsToIncrement = 5,
   polygonIncrementDuration = 100;
+
+let bestFitnessStagnantCount = 0;
 
 function preload() {
   origImg = loadImage("images/image.jpg");
@@ -75,6 +77,12 @@ function draw() {
 
   population.sort((a, b) => b.normalizedFitness - a.normalizedFitness);
 
+  if (bestGenerated && bestGenerated.fitness == population[0].fitness) {
+    bestFitnessStagnantCount++;
+  } else {
+    bestFitnessStagnantCount = 0;
+  }
+
   bestGenerated = population[0];
 
   let newPopulation = [];
@@ -92,8 +100,17 @@ function draw() {
   }
   population = newPopulation;
 
+  if (bestFitnessStagnantCount > 5) {
+    console.error("Stagnating!!!! Reset");
+    population.sort((a, b) => a.normalizedFitness - b.normalizedFitness);
+    bestFitnessStagnantCount = 0;
+    for (let i = 0; i < 10; i++) {
+      population[i] = new customImage();
+    }
+  }
+
   drawIntoCanvas(bestGenerated);
-  console.log(generation);
+  console.log(generation, bestFitnessStagnantCount);
   generation++;
   // noLoop();
 }

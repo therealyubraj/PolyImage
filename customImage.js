@@ -32,8 +32,8 @@ class customImage {
     calcFitness() {
         let s = 0;
         this.drawIntoRenderer();
-        for (let i = 0; i < alternateCanvas.width; i += 2) {
-            for (let j = 0; j < alternateCanvas.height; j += 2) {
+        for (let i = 0; i < alternateCanvas.width; i ++) {
+            for (let j = 0; j < alternateCanvas.height; j ++) {
                 let origCol = getImagePixel(i, j);
                 let generatedCol = this.getPixel(i, j);
 
