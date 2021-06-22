@@ -70,11 +70,14 @@ function draw() {
   for (let i = 0; i < populationSize; i++) {
     let indToPick = i;
     let p = population[indToPick];
-    let n = population[indToPick].copy();
-    n.mutate();
-    n.calcFitness();
-    if (n.fitness > p.fitness) {
-      population[indToPick] = n;
+    for (let j = 0; j < 10; j++) {
+      let n = population[indToPick].copy();
+      n.mutate();
+      n.calcFitness();
+      if (n.fitness > p.fitness) {
+        population[indToPick] = n;
+        break;
+      }
     }
   }
 

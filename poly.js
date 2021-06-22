@@ -88,12 +88,8 @@ class Poly {
             for (let i = 0; i < this.numberOfPoints; i++) {
                 let vecX = this.points[i].x,
                     vecY = this.points[i].y;
-
-
                 vecX += giveRandom(-this.size / 4, this.size / 4);
                 vecY += giveRandom(-this.size / 4, this.size / 4);
-
-
                 this.points[i] = createVector(vecX, vecY);
             }
             let c = getImagePixel(this.x, this.y);
