@@ -1,21 +1,15 @@
 let origImg;
 
-let formMR = 1,
-  populationSize = 75;
+let mutationRate = 0.01;
+let populationSize = 50;
 
 let population = [];
-let bestGenerated, alternateCanvas;
+let alternateCanvas;
 
 let generation = 1;
 
-let desiredWidth = 100,
-  desiredHeight = 100;
-
-let maxPolygons = 50,
-  polygonsToIncrement = 5,
-  polygonIncrementDuration = 100;
-
-let bestFitnessStagnantCount = 0;
+let desiredWidth = 50,
+  desiredHeight = 50;
 
 function preload() {
   origImg = loadImage("images/image.jpg");
@@ -31,88 +25,63 @@ function setup() {
   alternateCanvas = createGraphics(origImg.width, origImg.height);
   alternateCanvas.loadPixels();
 
-  console.log(alternateCanvas.pixels.length, origImg.pixels.length);
-
   for (let i = 0; i < populationSize; i++) {
-    population.push(new customImage());
+    population.push(new customImage(true));
   }
 
-  p5.Graphics.prototype.remove = function () {
-    if (this.elt.parentNode) {
-      this.elt.parentNode.removeChild(this.elt);
-    }
-    var idx = this._pInst._elements.indexOf(this);
-    if (idx !== -1) {
-      this._pInst._elements.splice(idx, 1);
-    }
-    for (var elt_ev in this._events) {
-      this.elt.removeEventListener(elt_ev, this._events[elt_ev]);
-    }
-  };
+  console.log(alternateCanvas.pixels.length, origImg.pixels.length);
 }
 
 function draw() {
   background(0);
   image(origImg, 0, 0);
 
-  // if (generation % polygonIncrementDuration == 0 && population[0].polygons.length < maxPolygons) {
-  //   population.forEach(p => {
-  //     p.addPoly(polygonsToIncrement);
-  //   });
-  // }
-
+  let sumOfFitness = 0;
   population.forEach(p => {
     p.calcFitness();
+    sumOfFitness += p.fitness;
   });
 
-  let s = 0;
+  population.forEach((p) => p.normalizedFitness = p.fitness / sumOfFitness);
+  population.sort((p1, p2) => p2.normalizedFitness - p1.normalizedFitness);
 
-  population.forEach(p => {
-    s += p.fitness;
-  });
-
-  population.forEach(p => {
-    p.normalizedFitness = p.fitness / s;
-  });
-
-  population.sort((a, b) => b.normalizedFitness - a.normalizedFitness);
-
-  if (bestGenerated && bestGenerated.fitness == population[0].fitness) {
-    bestFitnessStagnantCount++;
-  } else {
-    bestFitnessStagnantCount = 0;
-  }
-
-  bestGenerated = population[0];
-
-  let newPopulation = [];
   for (let i = 0; i < populationSize; i++) {
-    let indToPick = pickOne();
-    let p = population[indToPick];
-    let n = population[indToPick].copy();
-    n.mutate();
-    n.calcFitness();
-    if (n.fitness > p.fitness) {
-      newPopulation.push(n);
-    } else {
-      newPopulation.push(p);
+    if (random() < mutationRate) {
+      let toMutateInd = pickOne();
+      let toMutate = population[toMutateInd];
+
+      console.error("Mutating", toMutateInd);
+
+      let maxTries = Infinity;
+      let currentTries = 0;
+
+      while (maxTries > currentTries) {
+        let mutatedImage = toMutate.copy();
+        mutatedImage.mutate();
+        mutatedImage.calcFitness();
+        if (mutatedImage.fitness > toMutate.fitness) {
+          console.error("Mutation improved stuffs!!");
+          population[toMutateInd] = mutatedImage;
+          break;
+        }
+        currentTries++;
+      }
     }
   }
-  population = newPopulation;
 
-  if (bestFitnessStagnantCount > 5) {
-    console.error("Stagnating!!!! Reset");
-    population.sort((a, b) => a.normalizedFitness - b.normalizedFitness);
-    bestFitnessStagnantCount = 0;
-    for (let i = 0; i < 10; i++) {
-      population[i] = new customImage();
+  if (generation % 10 == 0) {
+    for (let i = populationSize - 11; i < populationSize; i++) {
+      let parent1 = population[pickOne()];
+      let parent2 = population[pickOne()];
+      population[i] = customImage.crossover(parent1, parent2);
     }
   }
 
-  drawIntoCanvas(bestGenerated);
-  console.log(generation, bestFitnessStagnantCount);
+  population[0].drawIntoGraphics();
+
+  image(alternateCanvas, desiredWidth, 0);
+  console.log(generation);
   generation++;
-  // noLoop();
 }
 
 function giveRandom(min, max) {
@@ -123,19 +92,19 @@ function getRadian(deg) {
   return (Math.PI * deg) / 180;
 }
 
-function getImagePixel(x, y) {
-  let indOfPixel = x + y * origImg.width;
+function getImagePixel(x, y, img = origImg) {
+  let indOfPixel = x + y * img.width;
   let colorToRet = color(255);
   let startingInd = 4 * indOfPixel;
-  colorToRet.setRed(origImg.pixels[startingInd + 0]);
-  colorToRet.setGreen(origImg.pixels[startingInd + 1]);
-  colorToRet.setBlue(origImg.pixels[startingInd + 2]);
+  colorToRet.setRed(img.pixels[startingInd + 0]);
+  colorToRet.setGreen(img.pixels[startingInd + 1]);
+  colorToRet.setBlue(img.pixels[startingInd + 2]);
   return colorToRet;
 }
 
 function pickOne() {
   let index = 0;
-  let r = random(1);
+  let r = random(0.7);
   let s = 0;
   while (r > s) {
     s += population[index].normalizedFitness;

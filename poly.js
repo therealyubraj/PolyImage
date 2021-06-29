@@ -1,20 +1,24 @@
 class Poly {
-    static opacity = 220;
     static spikiness = 0.5;
     static irregularity = 0.5;
     static minSides = 3;
     static maxSides = 8;
-    static maxSize = 30;
-    static minSize = 5;
+    static maxSize = 40;
+    static minSize = 10;
 
     constructor() {
         this.points = [];
+
         this.numberOfPoints = giveRandom(Poly.minSides, Poly.maxSides);
         this.size = giveRandom(Poly.minSize, Poly.maxSize);
-        this.x = giveRandom(0, origImg.width);
-        this.y = giveRandom(0, height);
+
+        this.x = giveRandom(this.size / 2, origImg.width - (this.size / 2));
+        this.y = giveRandom(this.size / 2, height - (this.size / 2));
+
         this.polyAngle = 360 / this.numberOfPoints;
         this.rotation = giveRandom(0, 360);
+        this.opacity = giveRandom(0, 255);
+
         for (let i = 0; i < this.numberOfPoints; i++) {
             let vecX = this.x,
                 vecY = this.y;
@@ -27,7 +31,7 @@ class Poly {
             }
 
             if (random() < Poly.spikiness) {
-                len += giveRandom(-this.size, this.size);
+                len += giveRandom(-this.size / 2, this.size / 2);
             }
 
             let dx = len * Math.sin(getRadian(ang));
@@ -47,10 +51,10 @@ class Poly {
         let r = red(c);
         let g = green(c);
         let b = blue(c);
-        this.color = color(r, g, b, Poly.opacity);
+        this.color = color(r, g, b, this.opacity);
     }
 
-    drawPolyIntoRenderer() {
+    drawPolyIntoGraphics() {
         alternateCanvas.noStroke();
         alternateCanvas.fill(this.color);
         alternateCanvas.beginShape();
@@ -80,24 +84,22 @@ class Poly {
         return poly;
     }
 
-    mutate(mrForm) {
-        if (random() < mrForm) {
-            this.x += giveRandom(-10, 10);
-            this.y += giveRandom(-10, 10);
-            for (let i = 0; i < this.numberOfPoints; i++) {
-                let vecX = this.points[i].x,
-                    vecY = this.points[i].y;
-                vecX += giveRandom(-this.size / 2, this.size / 2);
-                vecY += giveRandom(-this.size / 2, this.size / 2);
-                this.points[i] = createVector(vecX, vecY);
-            }
+    mutate() {
+        this.x += giveRandom(-10, 10);
+        this.y += giveRandom(-10, 10);
+
+        this.opacity += giveRandom(-10, 10);
+
+        for (let i = 0; i < this.numberOfPoints; i++) {
+            this.points[i].x += giveRandom(-this.size / 3, this.size / 3);
+            this.points[i].y += giveRandom(-this.size / 3, this.size / 3);
         }
-        if (random() < mrForm) {
-            let r = constrain(red(this.color) + giveRandom(-10, 10), 0, 255);
-            let g = constrain(green(this.color) + giveRandom(-10, 10), 0, 255);
-            let b = constrain(blue(this.color) + giveRandom(-10, 10), 0, 255);
-            this.color = color(r, g, b, Poly.opacity);
-        }
+
+        let c = getImagePixel(this.x, this.y);
+        let r = red(c);
+        let g = green(c);
+        let b = blue(c);
+        this.color = color(r, g, b, this.opacity);
     }
 
     printPoly() {
