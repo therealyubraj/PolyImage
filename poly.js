@@ -17,7 +17,7 @@ class Poly {
 
         this.polyAngle = 360 / this.numberOfPoints;
         this.rotation = giveRandom(0, 360);
-        this.opacity = giveRandom(0, 255);
+        this.opacity = giveRandom(180, 255);
 
         for (let i = 0; i < this.numberOfPoints; i++) {
             let vecX = this.x,
@@ -88,8 +88,11 @@ class Poly {
         this.x += giveRandom(-10, 10);
         this.y += giveRandom(-10, 10);
 
-        this.opacity += giveRandom(-10, 10);
+        this.x = constrain(this.x, 0, desiredWidth);
+        this.y = constrain(this.y, 0, desiredHeight);
 
+        this.opacity += giveRandom(-10, 10);
+        this.opacity = constrain(this.opacity, 180, 255);
         for (let i = 0; i < this.numberOfPoints; i++) {
             this.points[i].x += giveRandom(-this.size / 3, this.size / 3);
             this.points[i].y += giveRandom(-this.size / 3, this.size / 3);
