@@ -1,7 +1,7 @@
 let origImg;
 
-let mutationRate = 0.01;
-let populationSize = 50;
+let mutationRate = 0.03;
+let populationSize = 75;
 
 let population = [];
 let alternateCanvas;
