@@ -52,7 +52,7 @@ function draw() {
 
       console.error("Mutating", toMutateInd);
 
-      let maxTries = Infinity;
+      let maxTries = 10000;
       let currentTries = 0;
 
       while (maxTries > currentTries) {
