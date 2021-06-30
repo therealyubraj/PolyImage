@@ -93,6 +93,7 @@ class Poly {
 
         this.opacity += giveRandom(-10, 10);
         this.opacity = constrain(this.opacity, 180, 255);
+        
         for (let i = 0; i < this.numberOfPoints; i++) {
             this.points[i].x += giveRandom(-this.size / 3, this.size / 3);
             this.points[i].y += giveRandom(-this.size / 3, this.size / 3);

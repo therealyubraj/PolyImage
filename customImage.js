@@ -25,7 +25,7 @@ class customImage {
                 let deltaG = Math.abs(green(origCol) - green(genCol));
                 let deltaB = Math.abs(blue(origCol) - blue(genCol));
 
-                s += deltaB + deltaG + deltaR;
+                s += deltaB * deltaB + deltaG * deltaG + deltaR * deltaR;
             }
         }
         this.fitness = 1 / (1 + s);
@@ -35,7 +35,7 @@ class customImage {
         alternateCanvas.background(0);
         this.polygons.forEach((p) => {
             p.drawPolyIntoGraphics();
-        })
+        });
     }
 
     mutate() {
