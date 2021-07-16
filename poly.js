@@ -2,7 +2,7 @@ class Poly {
     static spikiness = 0.5;
     static irregularity = 0.5;
     static minSides = 3;
-    static maxSides = 8;
+    static maxSides = 5;
     static maxSize = 40;
     static minSize = 10;
 
