@@ -1,5 +1,5 @@
 class customImage {
-    static numberOfPolygons = 50;
+    static numberOfPolygons = 0;
 
     constructor(createNew = false) {
         this.polygons = [];
@@ -25,10 +25,16 @@ class customImage {
                 let deltaG = Math.abs(green(origCol) - green(genCol));
                 let deltaB = Math.abs(blue(origCol) - blue(genCol));
 
-                s += deltaB * deltaB + deltaG * deltaG + deltaR * deltaR;
+                s += deltaB + deltaG + deltaR;
             }
         }
         this.fitness = 1 / (1 + s);
+    }
+
+    addPoly(n) {
+        for (let i = 0; i < n; i++) {
+            this.polygons.push(new Poly());
+        }
     }
 
     drawIntoGraphics() {
@@ -39,7 +45,8 @@ class customImage {
     }
 
     mutate() {
-        this.polygons.forEach(p => p.mutate());
+        let lastInd = this.polygons.length - 1;
+        this.polygons[lastInd].mutate();
     }
 
     copy() {
@@ -48,15 +55,5 @@ class customImage {
             c.polygons.push(this.polygons[i].copy());
         }
         return c;
-    }
-
-    static crossover(parent1, parent2) {
-        let toRet = parent1.copy();
-
-        let copyInd = giveRandom(0, Poly.numberOfPolygons - 2);
-        for (let i = copyInd; i < this.numberOfPolygons; i++) {
-            toRet.polygons[i] = parent2.polygons[i].copy();
-        }
-        return toRet;
     }
 }

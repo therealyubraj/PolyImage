@@ -17,7 +17,7 @@ class Poly {
 
         this.polyAngle = 360 / this.numberOfPoints;
         this.rotation = giveRandom(0, 360);
-        this.opacity = giveRandom(180, 255);
+        this.opacity = giveRandom(200, 255);
 
         for (let i = 0; i < this.numberOfPoints; i++) {
             let vecX = this.x,
@@ -85,18 +85,14 @@ class Poly {
     }
 
     mutate() {
-        this.x += giveRandom(-10, 10);
-        this.y += giveRandom(-10, 10);
-
-        this.x = constrain(this.x, 0, desiredWidth);
-        this.y = constrain(this.y, 0, desiredHeight);
+        this.x += giveRandom(-20, 20);
+        this.y += giveRandom(-20, 20);
 
         this.opacity += giveRandom(-10, 10);
-        this.opacity = constrain(this.opacity, 180, 255);
         
         for (let i = 0; i < this.numberOfPoints; i++) {
-            this.points[i].x += giveRandom(-this.size / 3, this.size / 3);
-            this.points[i].y += giveRandom(-this.size / 3, this.size / 3);
+            this.points[i].x += giveRandom(-this.size / 2, this.size / 2);
+            this.points[i].y += giveRandom(-this.size / 2, this.size / 2);
         }
 
         let c = getImagePixel(this.x, this.y);

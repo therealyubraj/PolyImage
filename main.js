@@ -1,15 +1,16 @@
 let origImg;
 
-let mutationRate = 0.03;
-let populationSize = 75;
+let populationSize = 50;
 
 let population = [];
 let alternateCanvas;
 
-let generation = 1;
+let generation = 0;
 
-let desiredWidth = 50,
-  desiredHeight = 50;
+let desiredWidth = 100,
+  desiredHeight = 100;
+
+let polygonAddGeneration = 50, polygonsToAdd = 1;
 
 function preload() {
   origImg = loadImage("images/image.jpg");
@@ -36,48 +37,71 @@ function draw() {
   background(0);
   image(origImg, 0, 0);
 
-  let sumOfFitness = 0;
-  population.forEach(p => {
-    p.calcFitness();
-    sumOfFitness += p.fitness;
-  });
+  //add one polygon every X generation:
+  //choose the best addition
 
-  population.forEach((p) => p.normalizedFitness = p.fitness / sumOfFitness);
-  population.sort((p1, p2) => p2.normalizedFitness - p1.normalizedFitness);
+  if (generation % polygonAddGeneration == 0) {
+    //add polygons
+    population.forEach((p) => {
+      p.addPoly(polygonsToAdd);
+    });
 
-  for (let i = 0; i < populationSize; i++) {
-    if (random() < mutationRate) {
-      let toMutateInd = pickOne();
+    let bestImage, bestFitness = -Infinity;
+    population.forEach(p => {
+      p.calcFitness();
+
+      if (bestFitness < p.fitness) {
+        bestImage = p;
+        bestFitness = p.fitness;
+      }
+    });
+
+    //replace all the new ones by this
+    population.forEach(p => {
+      p = bestImage.copy();
+    });
+  }
+  else {
+    //mutate the newly added polygon
+    //mutate for X gens and repeat
+    let bestImage, bestFitness = -Infinity;
+    let fitnessSum = 0;
+    population.forEach(p => {
+      p.calcFitness();
+      fitnessSum += p.fitness;
+      if (bestFitness < p.fitness) {
+        bestImage = p;
+        bestFitness = p.fitness;
+      }
+    });
+    let normalizedSum = 0;
+    population.forEach(p => {
+      p.normalizedFitness = p.fitness / fitnessSum;
+      normalizedSum += p.normalizedFitness;
+    });
+
+    let newPopulation = [];
+    for (let i = 0; i < populationSize; i++) {
+      let toMutateInd = pickOne(normalizedSum);
       let toMutate = population[toMutateInd];
+      let mutated = toMutate.copy();
 
-      console.error("Mutating", toMutateInd);
-
-      let maxTries = 10000;
-      let currentTries = 0;
-
-      while (maxTries > currentTries) {
-        let mutatedImage = toMutate.copy();
-        mutatedImage.mutate();
-        mutatedImage.calcFitness();
-        if (mutatedImage.fitness > toMutate.fitness) {
-          console.error("Mutation improved stuffs!!");
-          population[toMutateInd] = mutatedImage;
+      let maxAttempts = 10, curAttempt = 0;
+      mutated.fitness = -Infinity;
+      while (curAttempt < maxAttempts) {
+        mutated.mutate();
+        mutated.calcFitness();
+        if (mutated.fitness > toMutate.fitness) {
+          newPopulation.push(mutated);
           break;
         }
-        currentTries++;
+        curAttempt++;
       }
     }
-  }
+    population = newPopulation;
 
-  if (generation % 10 == 0) {
-    for (let i = populationSize - 11; i < populationSize; i++) {
-      let parent1 = population[pickOne()];
-      let parent2 = population[pickOne()];
-      population[i] = customImage.crossover(parent1, parent2);
-    }
+    drawIntoCanvas(bestImage);
   }
-
-  population[0].drawIntoGraphics();
 
   image(alternateCanvas, desiredWidth, 0);
   console.log(generation);
@@ -102,11 +126,14 @@ function getImagePixel(x, y, img = origImg) {
   return colorToRet;
 }
 
-function pickOne() {
+function pickOne(sum) {
   let index = 0;
-  let r = random(0.7);
+  let r = random(sum);
   let s = 0;
   while (r > s) {
+    if (index >= populationSize) {
+      console.log(r, s, index);
+    }
     s += population[index].normalizedFitness;
     index++;
   }
@@ -115,6 +142,6 @@ function pickOne() {
 }
 
 function drawIntoCanvas(c) {
-  c.drawIntoRenderer();
+  c.drawIntoGraphics();
   image(alternateCanvas, origImg.width, 0);
 }
