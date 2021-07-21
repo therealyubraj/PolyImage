@@ -1,6 +1,6 @@
 let origImg;
 
-let populationSize = 10;
+let populationSize = 50;
 
 let population = [];
 let alternateCanvas;
