@@ -1,6 +1,6 @@
 let origImg;
 
-let populationSize = 50;
+let populationSize = 10;
 
 let population = [];
 let alternateCanvas;
@@ -42,10 +42,10 @@ function draw() {
 
   if (generation % polygonAddGeneration == 0) {
     //add polygons
-    console.error(polygonsToAdd, "Polygons added!!!", generation);
     population.forEach((p) => {
       p.addPoly(polygonsToAdd);
     });
+    console.error(polygonsToAdd, "Polygons added!!!", generation, population[0].polygons.length);
 
     let bestImage, bestFitness = -Infinity;
     population.forEach(p => {
@@ -90,6 +90,7 @@ function draw() {
       let maxAttempts = 10, curAttempt = 0;
 
       while (curAttempt < maxAttempts) {
+        mutated = toMutate.copy();
         mutated.mutate();
         mutated.calcFitness();
         if (mutated.fitness > toMutate.fitness) {
@@ -100,7 +101,7 @@ function draw() {
       }
 
       if(curAttempt >= maxAttempts){
-        newPopulation.push(toMutate);
+        newPopulation.push(toMutate.copy());
       }
     }
     population = newPopulation;
