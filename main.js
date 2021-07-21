@@ -42,6 +42,7 @@ function draw() {
 
   if (generation % polygonAddGeneration == 0) {
     //add polygons
+    console.error(polygonsToAdd, "Polygons added!!!", generation);
     population.forEach((p) => {
       p.addPoly(polygonsToAdd);
     });
@@ -93,7 +94,6 @@ function draw() {
         mutated.calcFitness();
         if (mutated.fitness > toMutate.fitness) {
           newPopulation.push(mutated);
-          console.error("DID a GOOD MUTATION!!!!");
           break;
         }
         curAttempt++;
