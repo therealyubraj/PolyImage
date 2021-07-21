@@ -57,8 +57,8 @@ function draw() {
     });
 
     //replace all the new ones by this
-    population.forEach(p => {
-      p = bestImage.copy();
+    population.forEach((p, i) => {
+      population[i] = bestImage.copy();
     });
   }
   else {
@@ -87,7 +87,7 @@ function draw() {
       let mutated = toMutate.copy();
 
       let maxAttempts = 10, curAttempt = 0;
-      mutated.fitness = -Infinity;
+
       while (curAttempt < maxAttempts) {
         mutated.mutate();
         mutated.calcFitness();
@@ -96,6 +96,10 @@ function draw() {
           break;
         }
         curAttempt++;
+      }
+
+      if(curAttempt >= maxAttempts){
+        newPopulation.push(toMutate);
       }
     }
     population = newPopulation;
