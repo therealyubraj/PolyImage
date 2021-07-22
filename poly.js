@@ -74,13 +74,15 @@ class Poly {
         poly.polyAngle = this.polyAngle;
         poly.rotation = this.rotation;
         poly.points = [];
-        for (let i = 0; i < this.numberOfPoints; i++) {
+        poly.opacity = this.opacity;
+        for (let i = 0; i < this.points.length; i++) {
             poly.points.push(createVector(this.points[i].x, this.points[i].y));
         }
         poly.color.setRed(red(this.color));
         poly.color.setGreen(green(this.color));
         poly.color.setBlue(blue(this.color));
-
+        poly.color.setAlpha(alpha(this.color));
+        
         return poly;
     }
 
@@ -89,8 +91,8 @@ class Poly {
         this.y += giveRandom(-20, 20);
 
         this.opacity += giveRandom(-10, 10);
-        
-        for (let i = 0; i < this.numberOfPoints; i++) {
+
+        for (let i = 0; i < this.points.length; i++) {
             this.points[i].x += giveRandom(-this.size / 2, this.size / 2);
             this.points[i].y += giveRandom(-this.size / 2, this.size / 2);
         }
@@ -103,6 +105,6 @@ class Poly {
     }
 
     printPoly() {
-        console.log("x:", this.x, 'y:', this.y, 'sides:', this.numberOfPoints, 'size:', this.size);
+        console.log("x:", this.x, 'y:', this.y, 'sides:', this.points.length, 'size:', this.size);
     }
 }

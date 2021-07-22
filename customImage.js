@@ -46,6 +46,7 @@ class customImage {
 
     mutate() {
         let lastInd = this.polygons.length - 1;
+        //console.error(lastInd);
         this.polygons[lastInd].mutate();
     }
 

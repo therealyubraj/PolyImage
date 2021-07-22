@@ -52,15 +52,18 @@ function draw() {
       p.calcFitness();
 
       if (bestFitness < p.fitness) {
-        bestImage = p;
+        bestImage = p.copy();
         bestFitness = p.fitness;
       }
     });
 
     //replace all the new ones by this
-    population.forEach((p, i) => {
-      population[i] = bestImage.copy();
-    });
+    population = [];
+    for (let i = 0; i < populationSize; i++) {
+      population.push(bestImage.copy());
+    };
+    
+    drawIntoCanvas(bestImage);
   }
   else {
     //mutate the newly added polygon
@@ -71,7 +74,7 @@ function draw() {
       p.calcFitness();
       fitnessSum += p.fitness;
       if (bestFitness < p.fitness) {
-        bestImage = p;
+        bestImage = p.copy();
         bestFitness = p.fitness;
       }
     });
@@ -100,7 +103,7 @@ function draw() {
         curAttempt++;
       }
 
-      if(curAttempt >= maxAttempts){
+      if (curAttempt >= maxAttempts) {
         newPopulation.push(toMutate.copy());
       }
     }
