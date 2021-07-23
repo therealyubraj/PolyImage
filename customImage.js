@@ -16,8 +16,9 @@ class customImage {
         let s = 0;
         this.drawIntoGraphics();
         alternateCanvas.loadPixels();
-        for (let i = 0; i < alternateCanvas.width; i++) {
-            for (let j = 0; j < alternateCanvas.height; j++) {
+        let rectToCheck = this.polygons[this.polygons.length - 1].getPolyRect();
+        for (let i = rectToCheck.min.X; i < rectToCheck.max.X; i++) {
+            for (let j = rectToCheck.min.Y; j < rectToCheck.max.Y; j++) {
                 let origCol = getImagePixel(i, j);
                 let genCol = getImagePixel(i, j, alternateCanvas);
 
