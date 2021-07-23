@@ -90,7 +90,7 @@ function draw() {
       let toMutate = population[toMutateInd];
       let mutated = toMutate.copy();
 
-      let maxAttempts = 10, curAttempt = 0;
+      let maxAttempts = 100, curAttempt = 0;
 
       while (curAttempt < maxAttempts) {
         mutated = toMutate.copy();
@@ -105,6 +105,7 @@ function draw() {
 
       if (curAttempt >= maxAttempts) {
         newPopulation.push(toMutate.copy());
+        console.log("COULD NOT FIND BETTER MUTATION!!!")
       }
     }
     population = newPopulation;
