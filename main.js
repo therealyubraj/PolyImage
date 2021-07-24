@@ -1,4 +1,4 @@
-let origImg;
+  let origImg;
 
 let populationSize = 50;
 
@@ -71,7 +71,7 @@ function draw() {
     let bestImage, bestFitness = -Infinity;
     let fitnessSum = 0;
     population.forEach(p => {
-      p.calcFitness();
+      p.calcFitnessMutation();
       fitnessSum += p.fitness;
       if (bestFitness < p.fitness) {
         bestImage = p.copy();
@@ -90,12 +90,12 @@ function draw() {
       let toMutate = population[toMutateInd];
       let mutated = toMutate.copy();
 
-      let maxAttempts = 100, curAttempt = 0;
+      let maxAttempts = 10, curAttempt = 0;
 
       while (curAttempt < maxAttempts) {
         mutated = toMutate.copy();
         mutated.mutate();
-        mutated.calcFitness();
+        mutated.calcFitnessMutation();
         if (mutated.fitness > toMutate.fitness) {
           newPopulation.push(mutated);
           break;
@@ -105,7 +105,7 @@ function draw() {
 
       if (curAttempt >= maxAttempts) {
         newPopulation.push(toMutate.copy());
-        console.log("COULD NOT FIND BETTER MUTATION!!!")
+        //console.log("COULD NOT FIND BETTER MUTATION!!!")
       }
     }
     population = newPopulation;

@@ -87,10 +87,10 @@ class Poly {
       }
     }
 
-    minX = constrain(minX, 0, origImg.width);
-    maxX = constrain(maxX, 0, origImg.width);
-    minY = constrain(minY, 0, origImg.height);
-    maxY = constrain(maxY, 0, origImg.height);
+    minX = parseInt(constrain(minX, 0, origImg.width));
+    maxX = parseInt(constrain(maxX, 0, origImg.width));
+    minY = parseInt(constrain(minY, 0, origImg.height));
+    maxY = parseInt(constrain(maxY, 0, origImg.height));
 
     let toRet = {
       min: createVector(minX, minY),
