@@ -49,7 +49,7 @@ function draw() {
 
     let bestImage, bestFitness = -Infinity;
     population.forEach(p => {
-      p.calcFitness();
+      p.calcFitnessMutation();
 
       if (bestFitness < p.fitness) {
         bestImage = p.copy();

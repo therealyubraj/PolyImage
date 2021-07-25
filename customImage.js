@@ -18,8 +18,8 @@ class customImage {
     alternateCanvas.loadPixels();
     let rectToCheck = this.polygons[this.polygons.length - 1].getPolyRect();
     //console.log(rectToCheck.min.x, rectToCheck.min.y, rectToCheck.max.x, rectToCheck.max.y);
-    for (let i = rectToCheck.min.x; i < rectToCheck.max.x; i++) {
-      for (let j = rectToCheck.min.y; j < rectToCheck.max.y; j++) {
+    for (let i = rectToCheck.min.x; i <= rectToCheck.max.x; i++) {
+      for (let j = rectToCheck.min.y; j <= rectToCheck.max.y; j++) {
         let origCol = getImagePixel(i, j);
         let genCol = getImagePixel(i, j, alternateCanvas);
 
@@ -30,15 +30,16 @@ class customImage {
         s += deltaB + deltaG + deltaR;
       }
     }
-    s /= ((rectToCheck.max.x - rectToCheck.min.x) * (rectToCheck.max.y - rectToCheck.min.y)) ;
+    s /= 1 + ((rectToCheck.max.x - rectToCheck.min.x) * (rectToCheck.max.y - rectToCheck.min.y)) ;
     this.fitness = 1 / (1 + s);
   }
+  
   calcFitness() {
     let s = 0;
     this.drawIntoGraphics();
     alternateCanvas.loadPixels();
     for (let i = 0; i < origImg.width; i++) {
-      for (let j =0; j < origImg.height; j++) {
+      for (let j = 0; j < origImg.height; j++) {
         let origCol = getImagePixel(i, j);
         let genCol = getImagePixel(i, j, alternateCanvas);
 
