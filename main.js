@@ -1,6 +1,6 @@
   let origImg;
 
-let populationSize = 50;
+let populationSize = 25;
 
 let population = [];
 let alternateCanvas;
@@ -49,7 +49,7 @@ function draw() {
 
     let bestImage, bestFitness = -Infinity;
     population.forEach(p => {
-      p.calcFitnessMutation();
+      p.calcFitness();
 
       if (bestFitness < p.fitness) {
         bestImage = p.copy();
@@ -71,7 +71,7 @@ function draw() {
     let bestImage, bestFitness = -Infinity;
     let fitnessSum = 0;
     population.forEach(p => {
-      p.calcFitnessMutation();
+      p.calcFitness();
       fitnessSum += p.fitness;
       if (bestFitness < p.fitness) {
         bestImage = p.copy();
@@ -90,12 +90,12 @@ function draw() {
       let toMutate = population[toMutateInd];
       let mutated = toMutate.copy();
 
-      let maxAttempts = 10, curAttempt = 0;
+      let maxAttempts = 1, curAttempt = 0;
 
       while (curAttempt < maxAttempts) {
         mutated = toMutate.copy();
         mutated.mutate();
-        mutated.calcFitnessMutation();
+        mutated.calcFitness();
         if (mutated.fitness > toMutate.fitness) {
           newPopulation.push(mutated);
           break;
@@ -116,6 +116,7 @@ function draw() {
   image(alternateCanvas, desiredWidth, 0);
   console.log(generation);
   generation++;
+  //noLoop();
 }
 
 function giveRandom(min, max) {

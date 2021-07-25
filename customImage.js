@@ -11,30 +11,9 @@ class customImage {
     this.fitness = 0;
     this.normalizedFitness = 0;
   }
-
-  calcFitnessMutation() {
-    let s = 0;
-    this.drawIntoGraphics();
-    alternateCanvas.loadPixels();
-    let rectToCheck = this.polygons[this.polygons.length - 1].getPolyRect();
-    //console.log(rectToCheck.min.x, rectToCheck.min.y, rectToCheck.max.x, rectToCheck.max.y);
-    for (let i = rectToCheck.min.x; i <= rectToCheck.max.x; i++) {
-      for (let j = rectToCheck.min.y; j <= rectToCheck.max.y; j++) {
-        let origCol = getImagePixel(i, j);
-        let genCol = getImagePixel(i, j, alternateCanvas);
-
-        let deltaR = Math.abs(red(origCol) - red(genCol));
-        let deltaG = Math.abs(green(origCol) - green(genCol));
-        let deltaB = Math.abs(blue(origCol) - blue(genCol));
-
-        s += deltaB + deltaG + deltaR;
-      }
-    }
-    s /= 1 + ((rectToCheck.max.x - rectToCheck.min.x) * (rectToCheck.max.y - rectToCheck.min.y)) ;
-    this.fitness = 1 / (1 + s);
-  }
   
   calcFitness() {
+    //console.log("HERE");
     let s = 0;
     this.drawIntoGraphics();
     alternateCanvas.loadPixels();
@@ -51,7 +30,9 @@ class customImage {
       }
     }
     this.fitness = 1 / (1 + s);
+    //console.log("HERE!");
   }
+
   addPoly(n) {
     for (let i = 0; i < n; i++) {
       this.polygons.push(new Poly());

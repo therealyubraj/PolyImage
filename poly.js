@@ -64,42 +64,6 @@ class Poly {
     alternateCanvas.endShape(CLOSE);
   }
 
-  getPolyRect() {
-    let minX = Infinity,
-      minY = Infinity;
-    let maxX = -Infinity,
-      maxY = -Infinity;
-
-    for (let i = 0; i < this.points.length; i++) {
-      let p = this.points[i];
-
-      if (minX > p.x) {
-        minX = p.x;
-      }
-      if (maxX < p.x) {
-        maxX = p.x;
-      }
-      if (minY > p.y) {
-        minY = p.y;
-      }
-      if (maxY < p.y) {
-        maxY = p.y;
-      }
-    }
-
-    minX = parseInt(constrain(minX, 0, origImg.width));
-    maxX = parseInt(constrain(maxX, 0, origImg.width));
-    minY = parseInt(constrain(minY, 0, origImg.height));
-    maxY = parseInt(constrain(maxY, 0, origImg.height));
-
-    let toRet = {
-      min: createVector(minX, minY),
-      max: createVector(maxX, maxY),
-    };
-
-    return toRet;
-  }
-
   copy() {
     let poly = new Poly();
 
