@@ -1,14 +1,14 @@
   let origImg;
 
-let populationSize = 25;
+let populationSize = 15;
 
 let population = [];
 let alternateCanvas;
 
 let generation = 0;
 
-let desiredWidth = 100,
-  desiredHeight = 100;
+let desiredWidth = 200,
+  desiredHeight = 300;
 
 let polygonAddGeneration = 50, polygonsToAdd = 1;
 

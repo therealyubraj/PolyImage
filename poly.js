@@ -2,8 +2,8 @@ class Poly {
   static spikiness = 0.5;
   static irregularity = 0.5;
   static minSides = 3;
-  static maxSides = 5;
-  static maxSize = 40;
+  static maxSides = 3;
+  static maxSize = 100;
   static minSize = 10;
 
   constructor() {
