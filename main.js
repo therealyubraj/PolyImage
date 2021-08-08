@@ -39,6 +39,10 @@ function draw() {
 
   //add one polygon every X generation:
   //choose the best addition
+  if(population[0].polygons.length == 50)
+  {
+    Poly.maxSize = 30;
+  }
 
   if (generation % polygonAddGeneration == 0) {
     //add polygons
