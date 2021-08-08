@@ -17,7 +17,7 @@ class Poly {
 
     this.polyAngle = 360 / this.numberOfPoints;
     this.rotation = giveRandom(0, 360);
-    this.opacity = 150;
+    this.opacity = 120;
 
     for (let i = 0; i < this.numberOfPoints; i++) {
       let vecX = this.x,
