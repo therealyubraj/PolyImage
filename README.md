@@ -1,4 +1,4 @@
-# ImageGenerator
+# PolyImage
 Image generation using genetic algorithm
 
 Inspired from rogeralsing.com obviously. I knew I had to try it when I saw it. Link for roger's page: https://rogerjohansson.blog/2008/12/07/genetic-programming-evolution-of-mona-lisa/
